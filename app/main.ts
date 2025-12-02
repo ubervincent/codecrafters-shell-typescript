@@ -5,7 +5,7 @@ const rl = createInterface({
   output: process.stdout,
 });
 
-rl.setPrompt("$")
+rl.setPrompt("$ ")
 rl.prompt()
 
 rl.on('line', (line: string) => {
