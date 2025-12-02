@@ -12,8 +12,7 @@ rl.on('line', (line: string) => {
   if (line == "exit") {
     rl.close()
   } else if (line.split(" ")[0] == "echo") {
-    const echo = line.split(" ")
-    echo.shift()
+    const echo = line.split(" ").slice(1)
     console.log(`${echo.join(" ")}`)
     rl.prompt()
   } else {
