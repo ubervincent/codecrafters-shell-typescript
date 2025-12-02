@@ -9,12 +9,12 @@ rl.setPrompt("$ ")
 rl.prompt()
 
 rl.on('line', (line: string) => {
-  console.log(`${line}: command not found`);
-
-  if (line === "exit") {
+  if (line == "exit") {
     rl.close()
+  } else {
+    console.log(`${line}: command not found`);
+    rl.prompt()
   }
-
-  rl.prompt()
+  
 });
 
