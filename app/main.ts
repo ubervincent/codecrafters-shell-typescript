@@ -9,36 +9,22 @@ rl.setPrompt("$ ")
 rl.prompt()
 
 rl.on('line', (line: string) => {
-  const parts = line.split(" ")
-  const command = parts[0]
+  const [command, ...args] = line.split(" ")
 
   if (line == "exit") {
-
     rl.close()
-
+    process.exit(0);
   } else if (command == "echo") {
-
     const echo = line.split(" ").slice(1)
     console.log(`${echo.join(" ")}`)
-    rl.prompt()
 
   } else if (command == "type") {
-
-    const toCheck = parts.slice(1).join(" ")
-
-    if (toCheck == "exit" || toCheck == "type" || toCheck == "echo") {
-      console.log(`${toCheck} is a shell builtin`)
-      rl.prompt()
-    } else {
-      console.log(`${toCheck} not found`)
-      rl.prompt()
-    }
+    ["echo", "type", "exit"].includes(args[0]) ? console.log(`${args[0]} is a shell builtin`) : console.log(`${args[0]}: not found`)
 
   } else {
-
     console.log(`${line}: command not found`);
-    rl.prompt()
 
   }
+  rl.prompt()
 });
 
