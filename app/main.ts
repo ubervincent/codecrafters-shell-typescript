@@ -25,20 +25,28 @@ rl.on('line', (line: string) => {
     const files = pathVar.split(path.delimiter);
     let found = false
 
-    for (const filePath of files!) {
-      try {
-        const binPath = path.join(filePath, args[0])
-        fs.accessSync(binPath, fs.constants.X_OK);
-        console.log(`${args[0]} is ${binPath}`)
-        found = true
-      } catch {
-        continue
+    if (["echo", "type", "exit"].includes(args[0])) {
+      console.log(`${args[0]} is a shell builtin`)
+    } else {
+      for (const filePath of files!) {
+        try {
+          const binPath = path.join(filePath, args[0])
+          fs.accessSync(binPath, fs.constants.X_OK);
+          console.log(`${args[0]} is ${binPath}`)
+          found = true
+        } catch {
+          continue
+        }
       }
-    } 
-    
-    if (!found) {
-      ["echo", "type", "exit"].includes(args[0]) ? console.log(`${args[0]} is a shell builtin`) : console.log(`${args[0]}: not found`)
+
+      if(!found) {
+        console.log(`${args[0]}: not found`)
+      }
     }
+
+
+
+
 
   } else {
 
