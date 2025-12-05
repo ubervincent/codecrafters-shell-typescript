@@ -22,7 +22,7 @@ rl.on('line', (line: string) => {
 
   } else if (command == "type") {
     const pathVar = process.env.PATH || "";
-    const files = pathVar.split(path.delimiter).filter(Boolean);
+    const files = pathVar.split(path.delimiter);
     let found = false
 
     for (const filePath of files!) {
