@@ -1,5 +1,6 @@
 import { createInterface } from "node:readline";
 import path from 'node:path';
+import fs from 'fs'
 
 const rl = createInterface({
   input: process.stdin,
@@ -25,8 +26,13 @@ rl.on('line', (line: string) => {
 
     for (const filePath of files!) {
       if (path.basename(filePath) == args[0]) {
-        console.log(`${args[0]} is ${filePath}`)
-        found = true
+        try {
+          fs.accessSync(filePath, fs.constants.X_OK);
+          console.log(`${args[0]} is ${filePath}`)
+          found = true
+        } catch {
+          continue
+        }
       } 
     }
     
