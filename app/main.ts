@@ -23,7 +23,7 @@ rl.on('line', (line: string) => {
     const files = process.env.PATH?.split(path.delimiter)
     let found = false
 
-    for (const filePath of files) {
+    for (const filePath of files!) {
       if (path.basename(filePath) == args[0]) {
         console.log(`${args[0]} is ${filePath}`)
         found = true
