@@ -24,6 +24,7 @@ rl.on('line', (line: string) => {
     const files = process.env.PATH?.split(path.delimiter)
     let found = false
 
+    console.log(files)
     for (const filePath of files!) {
       if (path.basename(filePath) == args[0]) {
         try {
