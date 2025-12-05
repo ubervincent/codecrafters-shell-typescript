@@ -27,7 +27,7 @@ rl.on('line', (line: string) => {
 
     for (const filePath of files!) {
       try {
-        fs.accessSync(filePath + args[0], fs.constants.X_OK);
+        fs.accessSync(path.join(filePath, args[0]), fs.constants.X_OK);
         console.log(`${args[0]} is ${filePath}`)
         found = true
       } catch {
