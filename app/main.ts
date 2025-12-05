@@ -26,16 +26,14 @@ rl.on('line', (line: string) => {
     let found = false
 
     for (const filePath of files!) {
-      if (path.basename(filePath) == args[0]) {
-        try {
-          fs.accessSync(filePath + args[0], fs.constants.X_OK);
-          console.log(`${args[0]} is ${filePath}`)
-          found = true
-        } catch {
-          continue
-        }
-      } 
-    }
+      try {
+        fs.accessSync(filePath + args[0], fs.constants.X_OK);
+        console.log(`${args[0]} is ${filePath}`)
+        found = true
+      } catch {
+        continue
+      }
+    } 
     
     if (!found) {
       ["echo", "type", "exit"].includes(args[0]) ? console.log(`${args[0]} is a shell builtin`) : console.log(`${args[0]}: not found`)
