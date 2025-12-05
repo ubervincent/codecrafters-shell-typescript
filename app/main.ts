@@ -21,14 +21,14 @@ rl.on('line', (line: string) => {
     console.log(`${echo.join(" ")}`)
 
   } else if (command == "type") {
-    const files = process.env.PATH?.split(path.delimiter)
+    const pathVar = process.env.PATH || "";
+    const files = pathVar.split(path.delimiter).filter(Boolean);
     let found = false
 
-    console.log(files)
     for (const filePath of files!) {
       if (path.basename(filePath) == args[0]) {
         try {
-          fs.accessSync(filePath, fs.constants.X_OK);
+          fs.accessSync(filePath + args[0], fs.constants.X_OK);
           console.log(`${args[0]} is ${filePath}`)
           found = true
         } catch {
