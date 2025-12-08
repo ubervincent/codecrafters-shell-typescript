@@ -1,5 +1,6 @@
 import { createInterface } from "node:readline";
 import path from 'node:path';
+import { exec } from 'node:child_process';
 import fs from 'fs'
 
 const rl = createInterface({
@@ -11,6 +12,10 @@ rl.setPrompt("$ ")
 rl.prompt()
 
 rl.on('line', (line: string) => {
+
+  const pathVar = process.env.PATH || "";
+  const files = pathVar.split(path.delimiter);
+
   const [command, ...args] = line.split(" ")
 
   if (line == "exit") {
@@ -21,8 +26,7 @@ rl.on('line', (line: string) => {
     console.log(`${echo.join(" ")}`)
 
   } else if (command == "type") {
-    const pathVar = process.env.PATH || "";
-    const files = pathVar.split(path.delimiter);
+   
     let found = false
 
     if (["echo", "type", "exit"].includes(args[0])) {
@@ -30,9 +34,9 @@ rl.on('line', (line: string) => {
     } else {
       for (const filePath of files!) {
         try {
-          const binPath = path.join(filePath, args[0])
-          fs.accessSync(binPath, fs.constants.X_OK);
-          console.log(`${args[0]} is ${binPath}`)
+          const execPath = path.join(filePath, args[0])
+          fs.accessSync(execPath, fs.constants.X_OK);
+          console.log(`${args[0]} is ${execPath}`)
           found = true
         } catch {
           continue
@@ -43,15 +47,24 @@ rl.on('line', (line: string) => {
         console.log(`${args[0]}: not found`)
       }
     }
-
-
-
-
-
   } else {
+    const execPaths = files.map(filePath => path.join(filePath, command))
+    let found = false
 
-    console.log(`${line}: command not found`);
-
+    for (const execPath of execPaths) {
+      try {
+        fs.accessSync(execPath, fs.constants.X_OK)
+        console.log(`${command} is ${execPath}`)
+        exec(`${command} ${args.join(' ')}`)
+        found = true
+      } catch {
+        continue
+      }
+    }
+    
+    if (!found) {
+      console.log(`${line}: command not found`);
+    }
   }
   rl.prompt()
 });
