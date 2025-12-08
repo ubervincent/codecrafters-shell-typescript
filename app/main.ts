@@ -1,9 +1,13 @@
 import { createInterface } from "node:readline";
 import path from 'node:path';
-import { exec } from 'node:child_process';
+import child_process from 'node:child_process';
 import fs from 'fs'
+import { promisify } from 'node:util';
 import { error } from "node:console";
 import { stdout } from "node:process";
+
+const exec = promisify(child_process.exec);
+
 
 const rl = createInterface({
   input: process.stdin,
@@ -13,7 +17,7 @@ const rl = createInterface({
 rl.setPrompt("$ ")
 rl.prompt()
 
-rl.on('line', (line: string) => {
+rl.on('line', async (line: string) => {
 
   const pathVar = process.env.PATH || "";
   const files = pathVar.split(path.delimiter);
@@ -56,9 +60,8 @@ rl.on('line', (line: string) => {
     for (const execPath of execPaths) {
       try {
         fs.accessSync(execPath, fs.constants.X_OK)
-        exec(`${command} ${args.join(' ')}`, (error, stdout, stderr) => {
-          console.log(`${stdout} \n`)
-        })
+        const { stdout } = await exec('ls');
+        console.log(stdout);
         found = true
       } catch {
         continue
