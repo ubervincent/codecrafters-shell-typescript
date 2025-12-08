@@ -58,7 +58,6 @@ rl.on('line', (line: string) => {
         fs.accessSync(execPath, fs.constants.X_OK)
         exec(`${command} ${args.join(' ')}`, (error, stdout, stderr) => {
           console.log(`${stdout} \n`)
-          rl.prompt()
         })
         found = true
       } catch {
