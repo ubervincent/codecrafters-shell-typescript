@@ -2,6 +2,8 @@ import { createInterface } from "node:readline";
 import path from 'node:path';
 import { exec } from 'node:child_process';
 import fs from 'fs'
+import { error } from "node:console";
+import { stdout } from "node:process";
 
 const rl = createInterface({
   input: process.stdin,
@@ -54,8 +56,10 @@ rl.on('line', (line: string) => {
     for (const execPath of execPaths) {
       try {
         fs.accessSync(execPath, fs.constants.X_OK)
-        console.log(`${command} is ${execPath}`)
-        exec(`${command} ${args.join(' ')}`)
+        exec(`${command} ${args.join(' ')}`, (error, stdout, stderr) => {
+          console.log(stdout)
+          rl.prompt()
+        })
         found = true
       } catch {
         continue
