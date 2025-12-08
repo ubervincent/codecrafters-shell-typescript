@@ -61,7 +61,7 @@ rl.on('line', async (line: string) => {
       try {
         fs.accessSync(execPath, fs.constants.X_OK)
         const { stdout } = await exec(line);
-        console.log(stdout);
+        console.log(stdout.trim());
         found = true
       } catch {
         continue
