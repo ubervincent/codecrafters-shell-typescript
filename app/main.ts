@@ -60,7 +60,7 @@ rl.on('line', async (line: string) => {
     for (const execPath of execPaths) {
       try {
         fs.accessSync(execPath, fs.constants.X_OK)
-        const { stdout } = await exec('ls');
+        const { stdout } = await exec(line);
         console.log(stdout);
         found = true
       } catch {
